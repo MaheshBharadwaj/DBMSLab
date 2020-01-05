@@ -1,0 +1,2 @@
+CREATE TABLE Musician(
+Name
