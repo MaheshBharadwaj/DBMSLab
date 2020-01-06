@@ -1,10 +1,10 @@
 REM: Creating Musician Table
 
 	CREATE TABLE Musician(
-	ID varchar2(4),
+	M_ID varchar2(4),
 	Name varchar2(40) CONSTRAINT musc_name_not_null NOT NULL,
 	BirthPlace varchar2(25),
-	CONSTRAINT musc_pk PRIMARY KEY(ID)
+	CONSTRAINT musc_pk PRIMARY KEY(M_ID)
 	);
 
 	DESC Musician
@@ -31,12 +31,12 @@ REM: Creating Album Table
 	No_Tracks Number(3),
 	Studio_Name varchar2(20),
 	Genre varchar2(10),
-	ID varchar2(4),
+	M_ID varchar2(4),
 	CONSTRAINT album_chk_genre CHECK(Genre IN ('CAR', 'DIV', 'MOV', 'POP')),
 	CONSTRAINT album_chk_year CHECK(Year > 1954),
 	CONSTRAINT album_pk PRIMARY KEY(Album_ID),
 	CONSTRAINT album_fk FOREIGN KEY(Studio_Name) REFERENCES Studio(Studio_Name),
-	CONSTRAINT album_fk_mus FOREIGN KEY(ID) REFERENCES Musician(ID)
+	CONSTRAINT album_fk_mus FOREIGN KEY(M_ID) REFERENCES Musician(M_ID)
 	);
 
 	DESC Album
