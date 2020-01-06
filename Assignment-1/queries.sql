@@ -1,64 +1,83 @@
-CREATE TABLE Musician(
-ID varchar2(4),
-Name varchar2(40),
-BirthPlace varchar2(25),
-CONSTRAINT musc_pk PRIMARY KEY(ID)
-);
+REM: Creating Musician Table
 
-DESC Musician
+	CREATE TABLE Musician(
+	ID varchar2(4),
+	Name varchar2(40) CONSTRAINT musc_name_not_null NOT NULL,
+	BirthPlace varchar2(25),
+	CONSTRAINT musc_pk PRIMARY KEY(ID)
+	);
 
-CREATE TABLE Studio(
-Studio_Name varchar2(20),
-Address varchar2(50),
-Phone Number(10),
-CONSTRAINT studio_pk PRIMARY KEY(Studio_Name)
-);
+	DESC Musician
 
-DESC Studio
 
-CREATE TABLE Album(
-Name varchar2(25),
-Album_ID varchar2(4),
-Year Number(4),
-No_Tracks Number(3),
-Studio_Name varchar2(20),
-Genre varchar2(10),
-ID varchar2(4),
-CONSTRAINT album_pk PRIMARY KEY(Album_ID),
-CONSTRAINT album_fk FOREIGN KEY(Studio_Name) REFERENCES Studio(Studio_Name),
-CONSTRAINT album_fk_mus FOREIGN KEY(ID) REFERENCES Musician(ID)
-);
+REM: Creating Studio Table
 
-DESC Album
+	CREATE TABLE Studio(
+	Studio_Name varchar2(20),
+	Address varchar2(50),
+	Phone Number(10),
+	CONSTRAINT studio_pk PRIMARY KEY(Studio_Name)
+	);
 
-CREATE TABLE Song(
-Album_ID varchar2(4),
-Track_No Number(3),
-Name varchar2(30),
-Length varchar2(10),
-Genre varchar2(10),
-CONSTRAINT song_pk PRIMARY KEY(Album_ID,Track_No),
-CONSTRAINT song_fk FOREIGN KEY(Album_ID) REFERENCES Album(Album_ID)
-);
+	DESC Studio
 
-DESC Song
 
-CREATE TABLE Artist(
-Artist_ID varchar2(4),
-Name varchar2(25),
-CONSTRAINT artist_pk PRIMARY KEY(Artist_ID)
-);
+REM: Creating Album Table
 
-DESC ARTIST
+	CREATE TABLE Album(
+	Name varchar2(25),
+	Album_ID varchar2(4),
+	Year Number(4),
+	No_Tracks Number(3),
+	Studio_Name varchar2(20),
+	Genre varchar2(10),
+	ID varchar2(4),
+	CONSTRAINT album_chk_genre CHECK(Genre IN ('CAR', 'DIV', 'MOV', 'POP')),
+	CONSTRAINT album_chk_year CHECK(Year > 1954),
+	CONSTRAINT album_pk PRIMARY KEY(Album_ID),
+	CONSTRAINT album_fk FOREIGN KEY(Studio_Name) REFERENCES Studio(Studio_Name),
+	CONSTRAINT album_fk_mus FOREIGN KEY(ID) REFERENCES Musician(ID)
+	);
 
-CREATE TABLE SungBy(
-Album_ID varchar2(4),
-Track_No Number(3),
-Artist_ID varchar2(4),
-S_Date Date,
-CONSTRAINT sungby_pk PRIMARY KEY(Album_ID,Track_No,Artist_ID),
- CONSTRAINT sungby_fk FOREIGN KEY(Album_ID,Track_No) REFERENCES Song(Album_ID,Track_No),
- CONSTRAINT sungby_fk2 FOREIGN KEY(Artist_ID) REFERENCES Artist(Artist_ID)
-);
+	DESC Album
 
-DESC SungBy
+REM: Creating Song Table
+
+	CREATE TABLE Song(
+	Album_ID varchar2(4),
+	Track_No Number(3),
+	Name varchar2(30) CONSTRAINT song_name_not_null NOT NULL,
+	Length varchar2(10),
+	Genre varchar2(10),
+	CONSTRAINT song_chk_genre CHECK(Genre IN ('PHI', 'REL', 'LOV', 'PAT')),
+	CONSTRAINT song_chk_len CHECK((Genre = 'PAT' and Length > 7) or Genre != 'PAT'),
+	CONSTRAINT song_pk PRIMARY KEY(Album_ID,Track_No),
+	CONSTRAINT song_fk FOREIGN KEY(Album_ID) REFERENCES Album(Album_ID)
+	);
+
+	DESC Song
+
+REM: Creating Artist Table
+
+	CREATE TABLE Artist(
+	Artist_ID varchar2(4),
+	Name varchar2(25),
+	CONSTRAINT artist_pk PRIMARY KEY(Artist_ID),
+	CONSTRAINT artist_name_uniq UNIQUE(Name)
+	);
+
+	DESC ARTIST
+
+REM: Creating SungBy Table
+
+	CREATE TABLE SungBy(
+	Album_ID varchar2(4),
+	Track_No Number(3),
+	Artist_ID varchar2(4),
+	S_Date Date,
+	CONSTRAINT sungby_pk PRIMARY KEY(Album_ID,Track_No,Artist_ID),
+	CONSTRAINT sungby_fk FOREIGN KEY(Album_ID,Track_No) REFERENCES Song(Album_ID,Track_No),
+ 	CONSTRAINT sungby_fk2 FOREIGN KEY(Artist_ID) REFERENCES Artist(Artist_ID)
+	);
+
+	DESC SungBy
