@@ -24,81 +24,7 @@ REM: Creating Musician Table
 
 	DESC Musician
 
-
-REM: Creating Studio Table
-
-	CREATE TABLE Studio(
-	Studio_Name varchar2(20),
-	Address varchar2(50),
-	Phone Number(10),
-	CONSTRAINT studio_pk PRIMARY KEY(Studio_Name)
-	);
-
-	DESC Studio
-
-
-REM: Creating Album Table
-
-	CREATE TABLE Album(
-	Album_Name varchar2(25),
-	Album_ID varchar2(4),
-	Year Number(4),
-	No_Tracks Number(3),
-	Studio_Name varchar2(20),
-	Genre varchar2(10),
-	M_ID varchar2(4),
-	CONSTRAINT album_chk_genre CHECK(Genre IN ('CAR', 'DIV', 'MOV', 'POP')),
-	CONSTRAINT album_chk_year CHECK(Year > 1954),
-	CONSTRAINT album_pk PRIMARY KEY(Album_ID),
-	CONSTRAINT album_fk FOREIGN KEY(Studio_Name) REFERENCES Studio(Studio_Name),
-	CONSTRAINT album_fk_mus FOREIGN KEY(M_ID) REFERENCES Musician(M_ID)
-	);
-
-	DESC Album
-
-REM: Creating Song Table
-
-	CREATE TABLE Song(
-	Album_ID varchar2(4),
-	Track_No Number(3),
-	Song_Name varchar2(30) CONSTRAINT song_name_not_null NOT NULL,
-	Length varchar2(10),
-	Genre varchar2(10),
-	CONSTRAINT song_chk_genre CHECK(Genre IN ('PHI', 'REL', 'LOV', 'PAT')),
-	CONSTRAINT song_chk_len CHECK((Genre = 'PAT' and Length > 7) or Genre != 'PAT'),
-	CONSTRAINT song_pk PRIMARY KEY(Album_ID,Track_No),
-	CONSTRAINT song_fk FOREIGN KEY(Album_ID) REFERENCES Album(Album_ID)
-	);
-
-	DESC Song
-
-REM: Creating Artist Table
-
-	CREATE TABLE Artist(
-	Artist_ID varchar2(4),
-	Artist_Name varchar2(25),
-	CONSTRAINT artist_pk PRIMARY KEY(Artist_ID),
-	CONSTRAINT artist_name_uniq UNIQUE(Artist_Name)
-	);
-
-	DESC ARTIST
-
-REM: Creating SungBy Table
-
-	CREATE TABLE SungBy(
-	Album_ID varchar2(4),
-	Track_No Number(3),
-	Artist_ID varchar2(4),
-	R_Date Date,
-	CONSTRAINT sungby_pk PRIMARY KEY(Album_ID,Track_No,Artist_ID),
-	CONSTRAINT sungby_fk FOREIGN KEY(Album_ID,Track_No) REFERENCES Song(Album_ID,Track_No),
- 	CONSTRAINT sungby_fk2 FOREIGN KEY(Artist_ID) REFERENCES Artist(Artist_ID)
-	);
-
-	DESC SungBy
-
 REM: --------------------------------------------------------------------
-
 
 REM: Inserting into Musician Table:
 	
@@ -120,8 +46,18 @@ REM: Contents of Musician Table
 	
 	SELECT * FROM Musician;
 
-
 REM: --------------------------------------------------------------------
+
+REM: Creating Studio Table
+
+	CREATE TABLE Studio(
+	Studio_Name varchar2(20),
+	Address varchar2(50),
+	Phone Number(10),
+	CONSTRAINT studio_pk PRIMARY KEY(Studio_Name)
+	);
+
+	DESC Studio
 
 REM: Inserting into Studio Table;
 	INSERT INTO Studio VALUES('U2 Studios','#1, 7th Main Road,Chennai',9988776655);
@@ -139,8 +75,26 @@ REM: Inserting Valid Records
 REM: Contents of Studio Table
 	SELECT * FROM Studio;
 
-
 REM: --------------------------------------------------------------------
+
+REM: Creating Album Table
+
+	CREATE TABLE Album(
+	Album_Name varchar2(25),
+	Album_ID varchar2(4),
+	Year Number(4),
+	No_Tracks Number(3),
+	Studio_Name varchar2(20),
+	Genre varchar2(10),
+	M_ID varchar2(4),
+	CONSTRAINT album_chk_genre CHECK(Genre IN ('CAR', 'DIV', 'MOV', 'POP')),
+	CONSTRAINT album_chk_year CHECK(Year > 1954),
+	CONSTRAINT album_pk PRIMARY KEY(Album_ID),
+	CONSTRAINT album_fk FOREIGN KEY(Studio_Name) REFERENCES Studio(Studio_Name),
+	CONSTRAINT album_fk_mus FOREIGN KEY(M_ID) REFERENCES Musician(M_ID)
+	);
+
+	DESC Album
 
 REM:  Inserting into Album Table
 
@@ -169,6 +123,21 @@ REM: Contents of Album Table
 
 REM: --------------------------------------------------------------------
 
+REM: Creating Song Table
+
+	CREATE TABLE Song(
+	Album_ID varchar2(4),
+	Track_No Number(3),
+	Song_Name varchar2(30) CONSTRAINT song_name_not_null NOT NULL,
+	Length varchar2(10),
+	Genre varchar2(10),
+	CONSTRAINT song_chk_genre CHECK(Genre IN ('PHI', 'REL', 'LOV', 'PAT')),
+	CONSTRAINT song_chk_len CHECK((Genre = 'PAT' and Length > 7) or Genre != 'PAT'),
+	CONSTRAINT song_pk PRIMARY KEY(Album_ID,Track_No),
+	CONSTRAINT song_fk FOREIGN KEY(Album_ID) REFERENCES Album(Album_ID)
+	);
+
+	DESC Song
 
 REM: Inserting into Song Table
 	INSERT INTO Song VALUES('ALB1',1,'First Track',8,'PHI');
@@ -189,6 +158,18 @@ REM: Contents of Song Table
 
 REM: --------------------------------------------------------------------
 
+REM: Creating Artist Table
+
+	CREATE TABLE Artist(
+	Artist_ID varchar2(4),
+	Artist_Name varchar2(25),
+	CONSTRAINT artist_pk PRIMARY KEY(Artist_ID),
+	CONSTRAINT artist_name_uniq UNIQUE(Artist_Name)
+	);
+
+	DESC ARTIST
+
+
 REM: Inserting into Artist Table
 
 	INSERT INTO Artist VALUES('A01','Sid Sriram');
@@ -205,7 +186,23 @@ REM: Contents of Artist
 
 	SELECT * FROM Artist;
 
+
+
 REM: --------------------------------------------------------------------
+
+REM: Creating SungBy Table
+
+	CREATE TABLE SungBy(
+	Album_ID varchar2(4),
+	Track_No Number(3),
+	Artist_ID varchar2(4),
+	R_Date Date,
+	CONSTRAINT sungby_pk PRIMARY KEY(Album_ID,Track_No,Artist_ID),
+	CONSTRAINT sungby_fk FOREIGN KEY(Album_ID,Track_No) REFERENCES Song(Album_ID,Track_No),
+ 	CONSTRAINT sungby_fk2 FOREIGN KEY(Artist_ID) REFERENCES Artist(Artist_ID)
+	);
+
+	DESC SungBy
 
 REM: Inserting into SungBy table
 	INSERT INTO SungBy VALUES('ALB1',1,'A01','05Jan2019');
