@@ -11,7 +11,7 @@ REM: Dropping Existing Tables
 	drop table musician;
 	drop table studio;
 
-
+REM: --------------------------------------------------------------------
 
 REM: Creating Musician Table
 
@@ -96,6 +96,8 @@ REM: Creating SungBy Table
 	);
 
 	DESC SungBy
+
+REM: --------------------------------------------------------------------
 
 
 REM: Inserting into Musician Table:
